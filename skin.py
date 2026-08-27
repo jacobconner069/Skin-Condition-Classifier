@@ -1,3 +1,4 @@
+#import the appropriate libraries
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,10 +13,11 @@ import torch.optim as optim
 import medmnist
 from medmnist import DermaMNIST
 import time
-#Part 1: Data Exploration and Preprocessing
+#Data Exploration and Preprocessing
 
 np.random.seed(42)
 torch.manual_seed(42)
+
 # Load the dataset
 training_data = DermaMNIST(split='train', download=True, size=28)
 validation_data = DermaMNIST(split='val', download=True, size=28)
@@ -57,7 +59,6 @@ plt.close()
 print("Sample images saved as 'sample_images.png'")
 
 # Class distribution
-
 plt.figure(figsize=(10, 6))
 plt.bar(class_names, [np.sum(y_train == i) for i in range(num_classes)])
 plt.xlabel('Class')
@@ -69,7 +70,7 @@ print("Class distribution plot saved as 'class_distribution.png'")
 plt.savefig("class_distribution.png")
 plt.close()
 
-#Part 2: Logistic Regression 
+#Logistic Regression 
 x_train_flat = x_train.reshape(len(x_train), -1).astype(np.float32)
 x_val_flat = x_val.reshape(len(x_val), -1).astype(np.float32)
 x_test_flat = x_test.reshape(len(x_test), -1).astype(np.float32)
@@ -128,7 +129,7 @@ plt.savefig("confusion_matrix_lr.png", dpi=120, bbox_inches="tight")
 plt.close()
 print("Confusion matrix saved as confusion_matrix_lr.png")
 
-#Part 3 Neural Network
+#Neural Network
 def tens(x,y):
     X = torch.tensor(x.reshape(len(x), -1), dtype=torch.float32)
     Y = torch.tensor(y, dtype=torch.long)
@@ -212,7 +213,7 @@ for epoch in range(1, EPOCHS + 1):
               f"Val Loss={val_losses[-1]:.4f} Acc={val_accs[-1]:.4f}")
     nn_time = time.time() - nn_start
  
-# ── 4e. Evaluation ──
+# Evaluation
 def predict_all(loader):
     all_preds, all_labels = [], []
     modell.eval()
@@ -261,7 +262,7 @@ plt.savefig("confusion_matrix_nn.png", dpi=120, bbox_inches="tight")
 plt.close()
 print("Saved: confusion_matrix_nn.png")
  
-#Part 4: Comparison Table
+#Comparison Table
 metrics_names = ["Accuracy", "Precision (macro)", "Recall (macro)", "F1 (macro)", "Training Time (s)"]
 lr_row  = list(test_metrics) + [round(lr_time, 2)]
 nn_row  = list(nn_test_metrics) + [round(nn_time, 2)]
